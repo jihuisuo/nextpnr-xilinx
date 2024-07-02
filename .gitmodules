@@ -3,7 +3,8 @@
 	url = https://github.com/YosysHQ/nextpnr-tests
 [submodule "xilinx/external/prjxray-db"]
 	path = xilinx/external/prjxray-db
-	url = https://github.com/SymbiFlow/prjxray-db
+	url = ssh://git@192.168.11.164:30022/eda/prjxray-db.git
+	branch = dev
 [submodule "xilinx/external/nextpnr-xilinx-meta"]
 	path = xilinx/external/nextpnr-xilinx-meta
-	url = https://github.com/jihuisuo/nextpnr-xilinx-meta
+	url = ssh://git@192.168.11.164:30022/eda/nextpnr-xilinx-meta.git
