@@ -215,7 +215,8 @@ aux_source_directory(frontend/ FRONTEND_FILES)
 
 set(COMMON_FILES ${COMMON_SRC_FILES} ${EXT_JSON11_FILES} ${JSON_PARSER_FILES} ${FRONTEND_FILES})
 if( NOT CMAKE_BUILD_TYPE )
-    set(CMAKE_BUILD_TYPE Release)
+    # set(CMAKE_BUILD_TYPE Release)
+    set(CMAKE_BUILD_TYPE Debug)
 endif()
 
 if(MINGW)
