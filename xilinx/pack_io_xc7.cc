@@ -407,6 +407,14 @@ void XC7Packer::pack_io()
     }
     flush_cells();
 
+    // 在类型转换之前，根据原语类别补充默认parameter
+    for (auto cell : sorted(ctx->cells)) {
+        CellInfo *ci = cell.second;
+        if(ci->type == IdString(ctx, "IBUF_IBUFDISABLE")){
+            ci->params.emplace(IdString(ctx, "USE_IBUFDISABLE"), Property("TRUE"));
+        }
+    }
+
     std::unordered_map<IdString, XFormRule> hriobuf_rules, hpiobuf_rules;
     hriobuf_rules[ctx->id("OBUF")].new_type = ctx->id("IOB33_OUTBUF");
     hriobuf_rules[ctx->id("OBUF")].port_xform[ctx->id("I")] = ctx->id("IN");
