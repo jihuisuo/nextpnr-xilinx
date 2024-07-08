@@ -113,6 +113,9 @@ void XC7Packer::decompose_iob(CellInfo *xil_iob, bool is_hr, const std::string &
         replace_port(xil_iob, ctx->id("IBUFDISABLE"), inbuf, ctx->id("IBUFDISABLE"));
         replace_port(xil_iob, ctx->id("INTERMDISABLE"), inbuf, ctx->id("INTERMDISABLE"));
 
+        // 迁移原cell的parameter
+        inbuf->params.insert(xil_iob->params.begin(), xil_iob->params.end());
+
         if (is_se_iobuf)
             subcells.push_back(inbuf);
     }
@@ -437,7 +440,7 @@ void XC7Packer::pack_io()
     hpiobuf_rules[ctx->id("IBUFDS")] = hpiobuf_rules[ctx->id("IBUF")];
     hpiobuf_rules[ctx->id("IBUFDS")].port_xform[ctx->id("IB")] = ctx->id("DIFFI_IN");
 
-    // Special xform for OBUFx and IBUFx.
+   // Special xform for OBUFx and IBUFx.
     std::unordered_map<IdString, XFormRule> rules;
     for (auto cell : sorted(ctx->cells)) {
         CellInfo *ci = cell.second;
