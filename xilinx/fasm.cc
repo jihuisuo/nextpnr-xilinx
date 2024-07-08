@@ -1146,6 +1146,26 @@ struct FasmBackend
         pop(2);
     }
 
+    void write_ibuf_config(CellInfo *ci){
+        // 根据cellinfo内部的parameter，确定需要什么fasm
+        // log_info("this is write_ibuf_config");
+        auto iter = ci->params.find(ctx->id("USE_IBUFDISABLE"));
+        if(iter != ci->params.end()){
+            if(iter->second.str == "TRUE"){
+                std::string tile = get_tile_name(ci->bel.tile);
+                push(tile);
+                Loc ioLoc = ctx->getSiteLocInTile(ci->bel);
+                bool is_sing     = boost::contains(tile, "_SING_");
+                bool is_top_sing = ci->bel.tile < ctx->getHclkForIob(ci->bel);
+                auto yLoc = is_sing ? (is_top_sing ? 1 : 0) : (1 - ioLoc.y);
+                push("IOB_Y" + std::to_string(yLoc));
+                write_bit("IBUFDISABLE.I");
+                pop();
+                pop();
+            }
+        }
+    }
+
     void write_io()
     {
         for (auto cell : sorted(ctx->cells)) {
@@ -1163,6 +1183,8 @@ struct FasmBackend
                        ci->type == ctx->id("ODELAYE2_ODELAYE2")) {
                 write_iol_config(ci);
                 blank();
+            } else if(ci->type == ctx->id("IOB33_INBUF_EN")){
+                write_ibuf_config(ci);
             }
         }
         for (auto &hclk : ioconfig_by_hclk) {
